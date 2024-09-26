@@ -1,0 +1,76 @@
+The error you're encountering, `Permission denied (publickey)`, usually occurs because Git is trying to use SSH to connect to GitHub, but your local machine does not have the correct SSH key associated with your GitHub account. Here's how you can resolve it:
+
+### Step 1: Check if You Have an SSH Key
+First, check if you already have an SSH key set up by running the following command in your terminal:
+
+```bash
+ls -al ~/.ssh
+```
+
+This will show you a list of files in your `~/.ssh` directory. If you see `id_rsa` and `id_rsa.pub` (or `id_ed25519` and `id_ed25519.pub`), then you have an SSH key pair.
+
+### Step 2: Generate a New SSH Key (if needed)
+If you don’t have an SSH key pair or if you want to generate a new one, you can do so with this command:
+
+```bash
+ssh-keygen -t ed25519 -C "your_email@example.com"
+```
+
+If you're using RSA, you can use:
+
+```bash
+ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+```
+
+This will prompt you to save the key in a specific file. Press **Enter** to accept the default file location, and optionally, you can set a passphrase.
+
+### Step 3: Add the SSH Key to the SSH Agent
+Once you've generated an SSH key, you need to add it to the SSH agent. Start the agent:
+
+```bash
+eval "$(ssh-agent -s)"
+```
+
+Then, add your key:
+
+```bash
+ssh-add ~/.ssh/id_ed25519
+```
+
+If you're using RSA:
+
+```bash
+ssh-add ~/.ssh/id_rsa
+```
+
+### Step 4: Add the SSH Key to Your GitHub Account
+You need to copy your SSH public key and add it to GitHub.
+
+1. **Copy the SSH Key to your clipboard**:
+
+   ```bash
+   cat ~/.ssh/id_ed25519.pub
+   ```
+
+   (Or use `id_rsa.pub` if you're using RSA).
+
+2. **Add it to GitHub**:
+   - Go to [GitHub SSH Keys Settings](https://github.com/settings/keys).
+   - Click **New SSH Key**.
+   - Paste the key you copied and give it a name.
+
+### Step 5: Try Cloning Again
+Once your SSH key is added to GitHub, try cloning the repository again:
+
+```bash
+git clone git@github.com:sonsaleaditya/DSA-JAVA.git
+```
+
+### Alternative: Use HTTPS Instead of SSH
+If you prefer, you can clone the repository using HTTPS, which does not require SSH keys:
+
+```bash
+git clone https://github.com/sonsaleaditya/DSA-JAVA.git
+```
+
+Let me know if you need further help with any of these steps!
